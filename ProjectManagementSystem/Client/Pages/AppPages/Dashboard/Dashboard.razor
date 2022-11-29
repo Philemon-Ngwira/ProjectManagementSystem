@@ -1,0 +1,273 @@
+﻿@page "/page"
+@using ProjectManagementSystem.Client.Pages.Dialogs
+@using ProjectManagementSystem.Client.Services
+@using ProjectManagementSystem.Shared.Models
+@inherits IndexBase
+@*Keyframes by https://animate.style/*@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<style type="text/css">
+
+    .bounceIn {
+        opacity: 0;
+        animation-delay: 0.5s;
+        animation-duration: 0.5s;
+        animation-name: bounceIn;
+        animation-fill-mode: forwards;
+    }
+
+    .bounceOut {
+        animation-duration: 0.5s;
+        animation-name: bounceOut;
+        animation-fill-mode: forwards;
+    }
+
+    .backInDown {
+        opacity: 0;
+        animation-delay: 0.5s;
+        animation-duration: 0.5s;
+        animation-name: backInDown;
+        animation-fill-mode: forwards;
+    }
+
+    .backOutDown {
+        animation-duration: 0.5s;
+        animation-name: backOutDown;
+        animation-fill-mode: forwards;
+    }
+
+    .rotateIn {
+        opacity: 0;
+        animation-delay: 0.5s;
+        animation-duration: 0.5s;
+        animation-name: rotateIn;
+        animation-fill-mode: forwards;
+    }
+
+    .rotateOut {
+        animation-duration: 0.5s;
+        animation-name: rotateOut;
+        animation-fill-mode: forwards;
+    }
+</style>
+
+<MudCarousel Class="mud-width-full" Style="height:200px;" TData="object" AutoCycle="true">
+    <MudCarouselItem Color="@Color.Primary" Transition="Transition.Slide">
+        <div class="d-flex" style="height:100%">
+            <MudImage Src="/images/banner.png" Width="1920" ObjectFit="ObjectFit.Cover"></MudImage>
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Color="@Color.Secondary" Transition="Transition.Fade">
+        <div class="d-flex" style="height:100%">
+            <MudImage Src="/images/GoldRushImage.jpg" Width="1920" ObjectPosition="ObjectPosition.Top" ObjectFit="ObjectFit.Cover"></MudImage>
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Color="@Color.Tertiary" Transition="Transition.Custom" CustomTransitionEnter="bounceIn" CustomTransitionExit="bounceOut">
+        <div class="d-flex" style="height:100%">
+            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Transition="Transition.Custom" CustomTransitionEnter="backInDown" CustomTransitionExit="backOutDown">
+        <div class="d-flex" style="background-color:lightgray; height:100%">
+            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Primary" Size="@Size.Large" />
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Transition="Transition.Custom" CustomTransitionEnter="rotateIn" CustomTransitionExit="rotateOut">
+        <div class="d-flex" style="background-color:lightgray; height:100%">
+            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Secondary" Size="@Size.Large" />
+        </div>
+    </MudCarouselItem>
+</MudCarousel>
+
+
+<MudOverlay @bind-Visible="isVisible" DarkBackground="true" AutoClose="true" />
+<MudGrid Class="bounceIn mb-3">
+    <AuthorizeView>
+        <Authorized>
+
+            <MudItem xs="12" md="6">
+                <MudCard Class="shadow mb-3">
+                    <MudCardContent>
+                        <MudText><b>Download Rates</b></MudText>
+                        <MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudCard Class="shadow mb-3">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.body1"><b>Phoenix Gaming Studio</b></MudText>
+                            <MudText Typo="Typo.body2">Upcoming Projects</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudCarousel Class="mud-width-full" Style="height:350px;" TData="object" AutoCycle="true">
+                            @if (_projects.Count >= 3)
+                            {
+                                <MudCarouselItem Color="@Color.Primary" Transition="Transition.Slide">
+                                    <div class="d-flex" style="height:100%">
+                                        <MudImage Src="@project1.ProjectImage" Width="1920" ObjectPosition="ObjectPosition.Center" ObjectFit="ObjectFit.Cover"></MudImage>
+                                    </div>
+                                </MudCarouselItem>
+                                <MudCarouselItem Color="@Color.Secondary" Transition="Transition.Custom">
+                                    <div class="d-flex" style="height:100%">
+                                        <MudImage Src="@project2.ProjectImage" Width="1920"></MudImage>
+                                    </div>
+                                </MudCarouselItem>
+                                <MudCarouselItem Color="@Color.Tertiary" Transition="Transition.Fade" CustomTransitionEnter="bounceIn" CustomTransitionExit="bounceOut">
+                                    <div class="d-flex" style="height:100%">
+                                        <MudImage Src="@project3.ProjectImage" Width="1920"></MudImage>
+                                    </div>
+                                </MudCarouselItem>
+                            }
+                            else if (_projects.Count == 2)
+                            {
+                                <MudCarouselItem Color="@Color.Primary" Transition="Transition.Slide">
+                                    <div class="d-flex" style="height:100%">
+                                        <MudImage Src="@project1.ProjectImage" Width="1920" ObjectPosition="ObjectPosition.Center" ObjectFit="ObjectFit.Cover"></MudImage>
+                                    </div>
+                                </MudCarouselItem>
+                                <MudCarouselItem Color="@Color.Secondary" Transition="Transition.Custom">
+                                    <div class="d-flex" style="height:100%">
+                                        <MudImage Src="@project2.ProjectImage" Width="1920"></MudImage>
+                                    </div>
+                                </MudCarouselItem>
+                            }
+                             else if (_projects.Count == 1)
+                            {
+                                <MudCarouselItem Color="@Color.Primary" Transition="Transition.Slide">
+                                    <div class="d-flex" style="height:100%">
+                                        <MudImage Src="@project1.ProjectImage" Width="1920" ObjectPosition="ObjectPosition.Center" ObjectFit="ObjectFit.Cover"></MudImage>
+                                    </div>
+                                </MudCarouselItem>
+                              
+                            }
+
+                        </MudCarousel>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12">
+                <MudCard Class="shadow mb-3">
+                    <MudCardContent>
+                        <MudText Typo="Typo.body1"><b>Top Projects Progress</b></MudText>
+                        <MudDivider />
+                        @if (_projects.Count >= 3)
+                        {
+                            <MudText Typo="Typo.body2">@_projects[0].ProjectName</MudText>
+                            <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Large" Value="Value0" Class="my-7" />
+                            <MudDivider />
+                            <MudText Typo="Typo.body2">@_projects[1].ProjectName</MudText>
+                            <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Large" Value="Value1" Class="my-7" />
+                            <MudDivider />
+                            <MudText Typo="Typo.body2">@_projects[2].ProjectName</MudText>
+                            <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Large" Value="Value2" Class="my-7" />
+                        }
+                        else if (_projects.Count == 2)
+                        {
+                            <MudText Typo="Typo.body2">@_projects[0].ProjectName</MudText>
+                            <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Large" Value="Value0" Class="my-7" />
+                            <MudDivider />
+                            <MudText Typo="Typo.body2">@_projects[1].ProjectName</MudText>
+                            <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Large" Value="Value1" Class="my-7" />
+                            <MudDivider />
+                        }
+                        else if (_projects.Count == 1)
+                        {
+                            <MudText Typo="Typo.body2">@_projects[0].ProjectName</MudText>
+                            <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Large" Value="Value0" Class="my-7" />
+                            <MudDivider />
+                        }
+
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudCard Class="shadow mb-3">
+                    <MudCardContent>
+                        <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="index" InputLabels="@labels" Width="300px" Height="300px" />
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+
+
+        </Authorized>
+
+    </AuthorizeView>
+    <MudItem xs="12" md="6">
+        <MudPaper>
+            <MudToolBar>
+
+            </MudToolBar>
+            <MudTable Items="@employees" Hover="true" Breakpoint="Breakpoint.Sm" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent" T="Employee">
+                <HeaderContent>
+                    <MudTh>Id</MudTh>
+                    <MudTh>First Name</MudTh>
+                    <MudTh>Last Name</MudTh>
+                    <MudTh>Gender</MudTh>
+                    <MudTh>Role</MudTh>
+
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Id">@context.Id</MudTd>
+                    <MudTd DataLabel="ProjectCode">@context.FirstName</MudTd>
+                    <MudTd DataLabel="ProjectName">@context.LastName</MudTd>
+                    <MudTd DataLabel="ProjectType">@context.GenderNavigation.GenderType</MudTd>
+                    <MudTd DataLabel="ProjectType">@context.RoleNavigation.Name</MudTd>
+
+
+                </RowTemplate>
+            </MudTable>
+        </MudPaper>
+    </MudItem>
+
+</MudGrid>
+@code {
+
+    protected IList<Employee> employees = new List<Employee>();
+    protected MudTable<Employee> mudTable = new MudTable<Employee>();
+    private List<string> clickedEvents = new();
+    private int selectedRowNumber = -1;
+    protected bool isVisible;
+    [Inject] IGenericRepositoryService _genericRepositoryService { get; set; }
+    [Inject] IDialogService DialogService { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetEmployees();
+    }
+
+    protected async Task GetEmployees()
+    {
+        var result = await _genericRepositoryService.GetAllAsync<Employee>("api/ProjectManagement/GetEmployees");
+        employees = result.ToList();
+    }
+    private void RowClickEvent(TableRowClickEventArgs<Employee> tableRowClickEventArgs)
+    {
+        clickedEvents.Add("Row has been clicked");
+
+    }
+
+    private string SelectedRowClassFunc(Employee Project, int rowNumber)
+    {
+        if (selectedRowNumber == rowNumber)
+        {
+            selectedRowNumber = -1;
+            clickedEvents.Add("Selected Row: None");
+            return string.Empty;
+        }
+        else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(Project))
+        {
+            selectedRowNumber = rowNumber;
+            clickedEvents.Add($"Selected Row: {rowNumber}");
+            return "selected";
+
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+}
+

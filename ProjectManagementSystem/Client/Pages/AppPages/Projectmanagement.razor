@@ -1,0 +1,141 @@
+﻿@page "/AppPages/ProjectManagement"
+@using ProjectManagementSystem.Client.Components
+@using ProjectManagementSystem.Shared.Models
+
+
+<MudCard Class="mb-3">
+    <MudText Typo="Typo.h2" Align="Align.Center"><b>Project Management</b></MudText>
+</MudCard>
+
+<MudGrid Class="  bounceIn">
+    <MudItem xs="12" sm="6">
+        <MudSelect T="Project" @bind-Value="project" Label="Select Project" ToStringFunc="converter" SelectedValuesChanged="addItem" AdornmentIcon="@Icons.Material.Filled.SavedSearch">
+            @foreach (var item in projects)
+            {
+                <MudSelectItem T="Project" Value="item">@item.ProjectName</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+
+</MudGrid>
+@if (project==null)
+{
+    <MudGrid>
+        <MudItem xs="12" sm="6">
+            <MudCard Class=" mb-3">
+                <MudText Align="Align.Center" Typo="Typo.h4"><b>Select Project To see TimeLine</b></MudText>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+
+    <MudTimeline TimelineOrientation="TimelineOrientation.Vertical" TimelinePosition="TimelinePosition.Right">
+        <MudTimelineItem @ref="itemPreProd" Variant="Variant.Filled">
+            <ItemContent>
+
+                <MudAlert @ref="MudAlertPreProduction">Pre-Production</MudAlert>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">@project.ReasonForDelayPreProd</MudText>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">@project.PreProductionCompletionDate.Value.ToShortDateString()</MudText>
+            </ItemContent>
+
+        </MudTimelineItem>
+        <MudTimelineItem @ref="itemProd" Variant=" Variant.Filled">
+            <ItemContent>
+                <MudAlert @ref="MudAlertProduction">Production</MudAlert>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">@project.ReasonForDelayProd</MudText>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">@project.ProductionCompletion.Value.ToShortDateString()</MudText>
+            </ItemContent>
+
+        </MudTimelineItem>
+        <MudTimelineItem Variant="Variant.Filled">
+            <ItemContent>
+                <MudAlert @ref="MudAlertTesting">Testing</MudAlert>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">@project.ResonForDelayTest</MudText>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">@project.TestingCompletion.Value.ToShortDateString()</MudText>
+            </ItemContent>
+
+        </MudTimelineItem>
+        <MudTimelineItem Variant="Variant.Filled">
+            <ItemContent>
+                <MudAlert @ref="MudAlertRelease">Release</MudAlert>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">@project.ReasonForDelayrelease</MudText>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">@project.ExpectedReleaseDate.Value.ToShortDateString()</MudText>
+            </ItemContent>
+        </MudTimelineItem>
+    </MudTimeline>
+}
+<MudDivider />
+<MudCard Class="mb-4">
+    <style>
+        .selected {
+            background-color: #1E88E5 !important;
+        }
+
+            .selected > td {
+                color: white !important;
+            }
+
+                .selected > td .mud-input {
+                    color: white !important;
+                }
+    </style>
+    <MudCard Class="mb-3">
+        <MudText Align="Align.Center" Typo="Typo.h5"><b>Current Projects</b></MudText>
+
+        <MudTable Items="@projects" Hover="true" Breakpoint="Breakpoint.Sm" @ref="mudTableCurrentProject" OnRowClick="RowClickEventCurrentProject" T="Project">
+            <HeaderContent>
+                <MudTh>Id</MudTh>
+                <MudTh>ProjectCode</MudTh>
+                <MudTh>ProjectName</MudTh>
+                <MudTh>ProjectType</MudTh>
+                <MudTh>ReleaseDate</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Id">@context.Id</MudTd>
+                <MudTd DataLabel="ProjectCode">@context.ProjectCode</MudTd>
+                <MudTd DataLabel="ProjectName">@context.ProjectName</MudTd>
+                <MudTd DataLabel="ProjectType">@context.ProjectType</MudTd>
+                <MudTd DataLabel="ReleaseDate">@context.ExpectedReleaseDate.Value.ToShortDateString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudCard>
+    <MudDivider />
+    <MudCard Class="mb-3">
+        <MudText Align="Align.Center" Typo="Typo.h5"><b>Completed Projects</b></MudText>
+        <MudTable Items="@completedProjects.Take(4)" Hover="true" Breakpoint="Breakpoint.Sm" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent" T="CompletedProject">
+            <HeaderContent>
+                <MudTh>Id</MudTh>
+                <MudTh>ProjectCode</MudTh>
+                <MudTh>ProjectName</MudTh>
+                <MudTh>ProjectType</MudTh>
+                <MudTh>ReleaseDate</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Id">@context.CompletedProjectId</MudTd>
+                <MudTd DataLabel="ProjectCode">@context.Project.ProjectCode</MudTd>
+                <MudTd DataLabel="ProjectName">@context.Project.ProjectName</MudTd>
+                <MudTd DataLabel="ProjectType">@context.Project.ProjectType</MudTd>
+                <MudTd DataLabel="ReleaseDate">@context.Project.ExpectedReleaseDate.Value.ToShortDateString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+        <MudExpansionPanels Style="flex: 1;">
+            <MudExpansionPanel Text="Show inline-clicked event log">
+                @foreach (var message in clickedEvents)
+                {
+                    <MudText>@message</MudText>
+                }
+                @if (clickedEvents.Count > 0)
+                {
+                    <div class="d-flex">
+                        <MudSpacer />
+                        <MudButton Class="mt-3" ButtonType="ButtonType.Button" Variant="Variant.Filled" OnClick="@(() => clickedEvents.Clear())">Clear events</MudButton>
+                    </div>
+                }
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </MudCard>
+</MudCard>
+
+

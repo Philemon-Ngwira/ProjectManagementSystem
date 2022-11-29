@@ -1,0 +1,230 @@
+﻿@page "/"
+@using ProjectManagementSystem.Shared.Models
+@inherits IndexBase
+
+@*Keyframes by https://animate.style/*@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<style type="text/css">
+
+    .bounceIn {
+        opacity: 0;
+        animation-delay: 0.5s;
+        animation-duration: 0.5s;
+        animation-name: bounceIn;
+        animation-fill-mode: forwards;
+    }
+
+    .bounceOut {
+        animation-duration: 0.5s;
+        animation-name: bounceOut;
+        animation-fill-mode: forwards;
+    }
+
+    .backInDown {
+        opacity: 0;
+        animation-delay: 0.5s;
+        animation-duration: 0.5s;
+        animation-name: backInDown;
+        animation-fill-mode: forwards;
+    }
+
+    .backOutDown {
+        animation-duration: 0.5s;
+        animation-name: backOutDown;
+        animation-fill-mode: forwards;
+    }
+
+    .rotateIn {
+        opacity: 0;
+        animation-delay: 0.5s;
+        animation-duration: 0.5s;
+        animation-name: rotateIn;
+        animation-fill-mode: forwards;
+    }
+
+    .rotateOut {
+        animation-duration: 0.5s;
+        animation-name: rotateOut;
+        animation-fill-mode: forwards;
+    }
+</style>
+
+<MudCarousel Class="mud-width-full" Style="height:200px;" TData="object" AutoCycle="true">
+    <MudCarouselItem Color="@Color.Primary" Transition="Transition.Slide">
+        <div class="d-flex" style="height:100%">
+            <MudImage Src="/images/banner.png" Width="1920" ObjectFit="ObjectFit.Cover"></MudImage>
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Color="@Color.Secondary" Transition="Transition.Fade">
+        <div class="d-flex" style="height:100%">
+            <MudImage Src="/images/GoldRushImage.jpg" Width="1920" ObjectPosition="ObjectPosition.Top" ObjectFit="ObjectFit.Cover"></MudImage>
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Color="@Color.Tertiary" Transition="Transition.Custom" CustomTransitionEnter="bounceIn" CustomTransitionExit="bounceOut">
+        <div class="d-flex" style="height:100%">
+            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Transition="Transition.Custom" CustomTransitionEnter="backInDown" CustomTransitionExit="backOutDown">
+        <div class="d-flex" style="background-color:lightgray; height:100%">
+            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Primary" Size="@Size.Large" />
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Transition="Transition.Custom" CustomTransitionEnter="rotateIn" CustomTransitionExit="rotateOut">
+        <div class="d-flex" style="background-color:lightgray; height:100%">
+            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Secondary" Size="@Size.Large" />
+        </div>
+    </MudCarouselItem>
+</MudCarousel>
+<MudGrid Class="bounceIn mb-3">
+    <AuthorizeView>
+        <Authorized>
+
+            <MudItem xs="12" md="6">
+                <MudCard Class="shadow mb-3">
+                    <MudCardContent>
+                        <MudText><b>Download Rates</b></MudText>
+                        <MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudCard Class="shadow mb-3">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.body1"><b>Phoenix Gaming Studio</b></MudText>
+                            <MudText Typo="Typo.body2">Upcoming Projects</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudCarousel Class="mud-width-full" Style="height:350px;" TData="object" AutoCycle="true">
+                            <MudCarouselItem Color="@Color.Primary" Transition="Transition.Slide">
+                                <div class="d-flex" style="height:100%">
+                                    <MudImage Src="@project1.ProjectImage" Width="1920" ObjectPosition="ObjectPosition.Center" ObjectFit="ObjectFit.Cover"></MudImage>
+                                </div>
+                            </MudCarouselItem>
+                            <MudCarouselItem Color="@Color.Secondary" Transition="Transition.Custom">
+                                <div class="d-flex" style="height:100%">
+                                    <MudImage Src="@project2.ProjectImage" Width="1920"></MudImage>
+                                </div>
+                            </MudCarouselItem>
+                            <MudCarouselItem Color="@Color.Tertiary" Transition="Transition.Fade" CustomTransitionEnter="bounceIn" CustomTransitionExit="bounceOut">
+                                <div class="d-flex" style="height:100%">
+                                    <MudImage Src="@project3.ProjectImage" Width="1920"></MudImage>
+                                </div>
+                            </MudCarouselItem>
+                        </MudCarousel>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            @* <MudItem xs="12">
+
+
+            </MudItem>*@
+            <MudItem xs="12">
+                <MudCard Class="shadow mb-3">
+                    <MudCardContent>
+                        <MudText Typo="Typo.body1"><b>Top Projects Progress</b></MudText>
+                        <MudDivider />
+                        
+                        <MudProgressLinear Color="Color.Secondary" Striped="true" Size="Size.Medium" Value="ValueDis1" Class="my-7" />
+                        <MudDivider />
+                      
+                        <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Large" Value="ValueDis1" Class="my-7" />
+
+
+                        @*@if (_projects.Count >= 3)
+                        {
+                        <MudText Typo="Typo.body2">@Project1Name</MudText>
+                        <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Large" Value="Value0" Class="my-7" />
+                        <MudDivider />
+                        <MudText Typo="Typo.body2">@Project2Name</MudText>
+                        <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Large" Value="Value1" Class="my-7" />
+                        <MudDivider />
+                        <MudText Typo="Typo.body2">@Project3Name</MudText>
+                        <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Large" Value="Value2" Class="my-7" />
+                        }
+                        else if (_projects.Count == 2)
+                        {
+                        <MudText Typo="Typo.body2">@Project1Name</MudText>
+                        <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Large" Value="Value0" Class="my-7" />
+                        <MudDivider />
+                        <MudText Typo="Typo.body2">@Project2Name</MudText>
+                        <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Large" Value="Value1" Class="my-7" />
+                        <MudDivider />
+                        }
+                        else if (_projects.Count == 1)
+                        {
+                        <MudText Typo="Typo.body2">@Project1Name</MudText>
+                        <MudProgressLinear Color="Color.Primary" Striped="true" Size="Size.Large" Value="Value0" Class="my-7" />
+                        <MudDivider />
+                        }*@
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudCard Class="shadow mb-3">
+                    <MudCardContent>
+                        <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="index" InputLabels="@labels" Width="300px" Height="300px" />
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+
+
+        </Authorized>
+
+    </AuthorizeView>
+
+    <MudItem xs="12" md="6">
+        <MudCard Class="shadow mb-3">
+            <MudCardContent>
+                <MudTable Items="@employees" Hover="true" Breakpoint="Breakpoint.Sm" T="Employee">
+                    <HeaderContent>
+                        <MudTh>Id</MudTh>
+                        <MudTh>First Name</MudTh>
+                        <MudTh>Last Name</MudTh>
+                        <MudTh>Gender</MudTh>
+                        <MudTh>Role</MudTh>
+                        <MudTh>Action</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Id">@context.Id</MudTd>
+                        <MudTd DataLabel="ProjectCode">@context.FirstName</MudTd>
+                        <MudTd DataLabel="ProjectName">@context.LastName</MudTd>
+                        <MudTd DataLabel="ProjectType">@context.GenderNavigation.GenderType</MudTd>
+                        <MudTd DataLabel="ProjectType">@context.RoleNavigation.Name</MudTd>
+
+
+                    </RowTemplate>
+                </MudTable>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+
+<footer class="site-footer">
+    <div class="container">
+        <hr>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <p class="copyright-text">
+                    Copyright &copy; 2022 All Rights Reserved by
+                    <a href="https://phoenixgamingstudio.com">Phoenix Gaming </a>.
+                </p>
+            </div>
+
+            @*<div class="col-md-4 col-sm-6 col-xs-12">
+            <ul class="social-icons">
+            <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
+            <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+            <li><a class="dribbble" href="#"><i class="fa fa-dribbble"></i></a></li>
+            <li><a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a></li>
+            </ul>
+            </div>*@
+        </div>
+    </div>
+</footer>
+

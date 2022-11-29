@@ -1,0 +1,12 @@
+﻿<MudTimelineItem Color="Color.Warning" Variant="Variant.Filled">
+    <ItemContent>
+        <MudAlert Severity="Severity.Warning">@data</MudAlert>
+        <MudText Typo="Typo.body2" Class="mud-text-secondary">@date.Value.ToShortDateString()</MudText>
+    </ItemContent>
+</MudTimelineItem>
+@code {
+    [Parameter]
+    public DateTime? date { get; set; } =DateTime.Today;
+    [Parameter]
+    public RenderFragment data { get; set; } 
+}

@@ -1,0 +1,34 @@
+﻿@page "/AppPages/EmployeeManagement"
+@using ProjectManagementSystem.Shared.Models
+
+<MudCard Class="mb-3">
+    <MudText Typo="Typo.h3" Style="font-style:oblique" Align="Align.Center"><b>Manage Team</b></MudText>
+</MudCard>
+
+<MudPaper>
+    <MudToolBar>
+        <MudIconButton Variant="Variant.Filled" Color="Color.Success" Icon="@Icons.Material.Filled.Add" OnClick="@OpenDialog">Add New project Type</MudIconButton>
+    </MudToolBar>
+    <MudTable Items="@employees" Hover="true" Breakpoint="Breakpoint.Sm" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent" T="Employee">
+        <HeaderContent>
+            <MudTh>Id</MudTh>
+            <MudTh>First Name</MudTh>
+            <MudTh>Last Name</MudTh>
+            <MudTh>Gender</MudTh>
+            <MudTh>Role</MudTh>
+            <MudTh>Action</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="ProjectCode">@context.FirstName</MudTd>
+            <MudTd DataLabel="ProjectName">@context.LastName</MudTd>
+            <MudTd DataLabel="ProjectType">@context.GenderNavigation.GenderType</MudTd>
+            <MudTd DataLabel="ProjectType">@context.RoleNavigation.Name</MudTd>
+            <MudTd DataLabel="Action"><MudIconButton Variant="Variant.Filled" Color="Color.Error" Icon="@Icons.Material.Filled.Delete"></MudIconButton></MudTd>
+ 
+        </RowTemplate>
+    </MudTable>
+</MudPaper>
+<MudOverlay @bind-Visible="isVisible" DarkBackground="true"  AutoClose="true" />
+
+

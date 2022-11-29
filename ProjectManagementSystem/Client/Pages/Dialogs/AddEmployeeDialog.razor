@@ -1,0 +1,78 @@
+﻿@using ProjectManagementSystem.Client.Services
+@using ProjectManagementSystem.Shared.Models
+<MudDialog>
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="12" md="6">
+                <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="_employee.FirstName" Label="Enter First Name" AdornmentIcon="@Icons.Material.Filled.DynamicForm"></MudTextField>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudTextField Variant="Variant.Outlined" Margin="Margin.Dense" Label="Enter Last Name" @bind-Value="_employee.LastName" AdornmentIcon="@Icons.Material.Filled.DynamicForm"></MudTextField>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudDatePicker AdornmentIcon="@Icons.Material.Filled.DateRange" @bind-Date="dateofBirth" Variant="Variant.Outlined" Margin="Margin.Dense" Label="Select Date of Birth"></MudDatePicker>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudSelect T="GenderTable" @bind-Value="_employee.GenderNavigation" Label="Gender" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Girl" Margin="Margin.Dense">
+                    @foreach (var item in genders)
+                    {
+                        <MudSelectItem T="GenderTable" Value="item">@item.GenderType</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudSelect T="AspNetRole" Label="Role" @bind-Value="_employee.RoleNavigation" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Work" Margin="Margin.Dense">
+                    @foreach (var item in roles)
+                    {
+                        <MudSelectItem T="AspNetRole" Value="item">@item.Name</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudButton>Cancel</MudButton>
+        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="Save">Save</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Inject] IGenericRepositoryService _genericRepositoryService { get; set; }
+    [Inject] ISnackbar Snackbar { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
+    private Employee _employee = new();
+    protected DateTime? dateofBirth = DateTime.Today;
+    protected IList<AspNetRole> roles = new List<AspNetRole>();
+    protected IList<GenderTable> genders = new List<GenderTable>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetRoles();
+        await GetGenders();
+    }
+
+    protected async Task GetRoles()
+    {
+        var rolelist = await _genericRepositoryService.GetAllAsync<AspNetRole>("api/ProjectManagement/GetRoles");
+        roles = rolelist.ToList();
+    }
+    protected async Task GetGenders()
+    {
+        var genderlist = await _genericRepositoryService.GetAllAsync<GenderTable>("api/ProjectManagement/GetGenders");
+        genders = genderlist.ToList();
+    }
+
+    private async void Save()
+    {
+        _employee.Dob = (DateTime)dateofBirth;
+        _employee.Role = _employee.RoleNavigation.Id;
+        _employee.Gender = _employee.GenderNavigation.Id;
+        _employee.GenderNavigation = null;
+        _employee.RoleNavigation = null;
+
+        await _genericRepositoryService.SaveAllAsync("api/ProjectManagement/SaveEmployee", _employee);
+        Snackbar.Add("Successfully Saved !", Severity.Success);
+        MudDialog.Close();
+        NavigationManager.NavigateTo("/AppPages/EmployeeManagement", true);
+    }
+}

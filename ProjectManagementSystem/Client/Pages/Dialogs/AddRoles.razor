@@ -1,0 +1,38 @@
+﻿@using ProjectManagementSystem.Client.Services
+@using ProjectManagementSystem.Shared.Models
+<MudDialog>
+    <DialogContent>
+        <MudTextField Label="Role Name" Variant="Variant.Outlined" @bind-Value="role.Name"></MudTextField>
+        <MudTextField Label="Normalize Name(Capitilize)" Variant="Variant.Outlined" @bind-Value="role.NormalizedName"></MudTextField>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Cancel" Color="Color.Error">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Save" Color="Color.Success" OnClick="submit">Submit</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    protected AspNetRole role = new();
+    [Inject] IGenericRepositoryService GenericRepositoryService { get; set; }
+    [Inject] ISnackbar Snackbar {get;set;}
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    async Task submit()
+    {
+        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var stringChars = new char[8];
+        var random = new Random();
+
+        for (int i = 0; i < stringChars.Length; i++)
+        {
+            stringChars[i] = chars[random.Next(chars.Length)];
+        }
+
+        var finalString = new String(stringChars);
+        role.Id = finalString;
+        role.NormalizedName.ToUpper();
+        await GenericRepositoryService.SaveAllAsync<AspNetRole>("api/ProjectManagement/SaveRole", role);
+        Snackbar.Add("Successfully Saved", Severity.Success);
+        MudDialog.Close();
+    }
+}

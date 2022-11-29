@@ -1,0 +1,36 @@
+﻿@using ProjectManagementSystem.Client.Shared.Theme
+@inherits LayoutComponentBase
+
+<MudThemeProvider IsDarkMode="_isDarkMode" Theme="theme"/>
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar>
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudImage Src="/images/png.logo.png" Width="160" Height="80"></MudImage><b>Phoenix Gaming Project Management</b>
+        <MudSpacer />
+        <MudSwitch @bind-Checked="@_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Light/Dark Mode" />
+        <LoginDisplay />
+    </MudAppBar>
+    <MudDrawer @bind-Open="@_drawerOpen" >
+        <NavMenu />
+    </MudDrawer>
+    <MudContainer MaxWidth="MaxWidth.ExtraLarge">
+        <MudMainContent>
+            @Body
+        </MudMainContent>
+ 
+    </MudContainer>
+        
+</MudLayout>
+
+@code {
+    bool _drawerOpen = false;
+    private bool _isDarkMode;
+    ProjectManagementTheme theme = new();
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+}

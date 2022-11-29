@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>ProjectManagementSystem</title>
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="/css/Footer.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="ProjectManagementSystem.Client.styles.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <link href="manifest.json" rel="manifest" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+</head>
+
+<body>
+
+    <div id="app">
+       
+        <LoadingBody>
+           
+            <div class="loader">
+
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </LoadingBody>
+
+    </div>
+    <style>
+        LoadingBody {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f1f1f1;
+        }
+
+        .loader {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: linear-gradient(#f07e6e, #84cdfa, #5ad1cd);
+            animation: animate 1.2s linear infinite;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+       
+
+        .loader span {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(#f07e6e, #84cdfa, #5ad1cd);
+        }
+
+            .loader span:nth-child(1) {
+                filter: blur(5px);
+            }
+
+            .loader span:nth-child(2) {
+                filter: blur(10px);
+            }
+
+            .loader span:nth-child(3) {
+                filter: blur(25px);
+            }
+
+            .loader span:nth-child(4) {
+                filter: blur(50px);
+            }
+
+        .loader:after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+           
+            background: #f1f1f1;
+            border: solid white 10px;
+            border-radius: 50%;
+        }
+    </style>
+   
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+</body>
+
+</html>
+

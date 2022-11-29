@@ -1,0 +1,27 @@
+﻿@page "/AppPages/ProjectTypeManagement"
+@using ProjectManagementSystem.Client.Services
+@using ProjectManagementSystem.Shared.Models
+
+<MudCard Class="mb-3">
+    <MudText Typo="Typo.h3" Style="font-style:oblique" Align="Align.Center"><b>Manage Project Types</b></MudText>
+</MudCard>
+
+<MudPaper>
+    <MudToolBar>
+        <MudIconButton Variant="Variant.Filled" Color="Color.Success" Icon="@Icons.Material.Filled.Add">Add New project Type</MudIconButton>
+    </MudToolBar>
+    <MudTable Items="@projectTypes" Hover="true" Breakpoint="Breakpoint.Sm"  @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent" T="ProjectType">
+        <HeaderContent>
+            <MudTh>Id</MudTh>
+            <MudTh>Project Type</MudTh>
+            <MudTh>Action</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="ProjectCode">@context.ProjectTypeName</MudTd>
+            <MudTd DataLabel="Action"><MudIconButton Variant="Variant.Filled" Color="Color.Error" Icon="@Icons.Material.Filled.Delete"></MudIconButton></MudTd>
+        </RowTemplate>
+    </MudTable>
+</MudPaper>
+
+

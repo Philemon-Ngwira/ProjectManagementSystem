@@ -1,0 +1,76 @@
+﻿@page "/AppPages/RolesManagement"
+@using ProjectManagementSystem.Client.Pages.Dialogs
+@using ProjectManagementSystem.Client.Services
+@using ProjectManagementSystem.Shared.Models
+<MudCard>
+
+</MudCard>
+<MudPaper>
+    <MudToolBar>
+        <MudIconButton Variant="Variant.Filled" Color="Color.Success" Icon="@Icons.Material.Filled.Add" OnClick="@OpenDialog">Add New project Type</MudIconButton>
+    </MudToolBar>
+    <MudTable Items="@roles" Hover="true" Breakpoint="Breakpoint.Sm" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent" T="AspNetRole">
+        <HeaderContent>
+            <MudTh>Role Name</MudTh>
+            <MudTh>Normalized Name</MudTh>
+            <MudTh>Action</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="ProjectCode">@context.Name</MudTd>
+            <MudTd DataLabel="ProjectName">@context.NormalizedName</MudTd>
+            <MudTd DataLabel="Action"><MudIconButton Variant="Variant.Filled" Color="Color.Error" Icon="@Icons.Material.Filled.Delete"></MudIconButton></MudTd>
+
+        </RowTemplate>
+    </MudTable>
+</MudPaper>
+@code {
+    protected MudTable<AspNetRole> mudTable;
+    protected AspNetRole role = new();
+    protected IList<AspNetRole> roles = new List<AspNetRole>();
+    [Inject] IDialogService DialogService { get; set; }
+    [Inject] IGenericRepositoryService _genericRepositoryService { get; set; }
+    private List<string> clickedEvents = new();
+    private int selectedRowNumber = -1;
+    protected override async Task OnInitializedAsync()
+    {
+        await GetRoles();
+    }
+
+    async Task GetRoles()
+    {
+        var result = await _genericRepositoryService.GetAllAsync<AspNetRole>("api/ProjectManagement/GetRoles");
+        roles = result.ToList();
+    }
+
+    protected void OpenDialog()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        DialogService.Show<AddRoles>("Add New Role", options);
+    }
+
+    private string SelectedRowClassFunc(AspNetRole Project, int rowNumber)
+    {
+        if (selectedRowNumber == rowNumber)
+        {
+            selectedRowNumber = -1;
+            clickedEvents.Add("Selected Row: None");
+            return string.Empty;
+        }
+        else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(Project))
+        {
+            selectedRowNumber = rowNumber;
+            clickedEvents.Add($"Selected Row: {rowNumber}");
+            return "selected";
+
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+    private void RowClickEvent(TableRowClickEventArgs<AspNetRole> tableRowClickEventArgs)
+    {
+        clickedEvents.Add("Row has been clicked");
+
+    }
+}

@@ -1,0 +1,27 @@
+﻿
+<MudNavMenu>
+    <AuthorizeView >
+        <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Sharp.Dashboard">Dashboard</MudNavLink>
+        <MudNavGroup Title="App Pages" Icon="@Icons.Rounded.Pages" Expanded="false">
+            <MudNavLink Href="/AppPages/AddProject" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Add">Add New Project</MudNavLink>
+            <MudNavLink Href="/AppPages/ProjectManagement" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apps">Project Management</MudNavLink>
+
+        </MudNavGroup>
+        @*Admin Later to Be Added*@
+        <MudNavGroup Title="Admin Pages" Icon="@Icons.Rounded.AdminPanelSettings" Expanded="false">
+            <MudNavLink Href="/AppPages/AddProject" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Add">Add New Project</MudNavLink>
+            <MudNavLink Href="/AppPages/ProjectTypeManagement" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.MergeType">Manage Project Types</MudNavLink>
+            <MudNavLink Href="/AppPages/ProjectManagement" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Apps">Project Management</MudNavLink>
+            <MudNavLink Href="/AppPages/EmployeeManagement" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People">Employee Management</MudNavLink>
+        </MudNavGroup>
+    </AuthorizeView>
+    <MudNavLink Href="/about" Icon="@Icons.Material.Filled.AddAlert" Match="NavLinkMatch.Prefix">About</MudNavLink>
+    <MudNavLink>
+        <AuthorizeView>
+            <NotAuthorized>
+                <a href="authentication/login"><MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Login" Color="Color.Success">Log In</MudButton></a>
+            </NotAuthorized>
+        </AuthorizeView>
+    </MudNavLink>
+
+</MudNavMenu>
